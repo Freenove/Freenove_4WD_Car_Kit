@@ -1,6 +1,6 @@
 ## Freenove 4WD Car Kit
 
-> Apply to FNK00041, FNK00042. A learning smart car kit, Compatible with Arduino.
+> A learning smart car kit, Compatible with Arduino.
 
 <img src='Images/freenove-4wd-car.png' width='70%'/>
 
