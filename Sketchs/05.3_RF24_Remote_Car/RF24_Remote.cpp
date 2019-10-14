@@ -20,6 +20,7 @@ bool nrf24L01Setup() {
 
 bool getNrf24L01Data()
 {
+  delayMicroseconds(1000);
   if (radio.available()) {             // if receive the data
     while (radio.available()) {         // read all the data
       radio.read(nrfDataRead, sizeof(nrfDataRead));   // read data

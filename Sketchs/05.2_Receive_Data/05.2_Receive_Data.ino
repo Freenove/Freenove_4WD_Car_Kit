@@ -1,9 +1,9 @@
 /**********************************************************************
-* Filename    : Receive_Data.ino
-* Product     : Freenove 4WD Car for UNO
-* Description :Receive data from remote control and print it to monitor.
-* Auther      : www.freenove.com
-* Modification: 2019/08/06
+  Filename    : Receive_Data.ino
+  Product     : Freenove 4WD Car for UNO
+  Description :Receive data from remote control and print it to monitor.
+  Auther      : www.freenove.com
+  Modification: 2019/08/06
 **********************************************************************/
 #include <SPI.h>
 #include "RF24.h"
@@ -16,7 +16,7 @@ const byte addresses[6] = "Free1";   //set commucation address, same to remote c
 int nrfDataRead[8];            //define an array to save data from remote controller
 void setup() {
   Serial.begin(9600);
-  
+
   // NRF24L01
   if (radio.begin()) {                  // initialize RF24
     radio.setPALevel(RF24_PA_LOW);      // set power amplifier (PA) level
@@ -34,6 +34,7 @@ void setup() {
 }
 
 void loop() {
+  delayMicroseconds(1000);
   if (radio.available()) {              // if receive the data
     while (radio.available()) {         // read all the data
       radio.read(nrfDataRead, sizeof(nrfDataRead));   // read data

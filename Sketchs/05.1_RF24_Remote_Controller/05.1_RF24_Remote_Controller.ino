@@ -58,12 +58,14 @@ void loop()
   dataWrite[7] = digitalRead(s3Pin);        // save data of switch 3
 
   // write radio data
-  if (radio.write(dataWrite, sizeof(dataWrite)))
+  if (radio.writeFast(&dataWrite, sizeof(dataWrite)))
   {
     digitalWrite(led3Pin, HIGH);
-    delay(20);
+  }
+  else {
     digitalWrite(led3Pin, LOW);
   }
+  delay(20);
 
   // make LED emit different brightness of light according to analog of potentiometer
   analogWrite(led1Pin, map(dataWrite[0], 0, 1023, 0, 255));
