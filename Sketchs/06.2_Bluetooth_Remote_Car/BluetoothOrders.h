@@ -4,9 +4,9 @@
 #define _BLUETOOTHORDERS_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
+  #include "arduino.h"
 #else
-	#include "WProgram.h"
+  #include "WProgram.h"
 #endif
 
 #define ACTION_MOVE   'A'
@@ -20,5 +20,10 @@
 #define ACTION_GET_VOLTAGE   'I'
 #define ECHO_OK   'J'
 #define ACTION_NONE   'K'
+
+#define MODE_NONE  0
+#define MODE_GRAVITY  1
+#define MODE_ULTRASONIC  2
+#define MODE_TRACKING  3
 
 #endif

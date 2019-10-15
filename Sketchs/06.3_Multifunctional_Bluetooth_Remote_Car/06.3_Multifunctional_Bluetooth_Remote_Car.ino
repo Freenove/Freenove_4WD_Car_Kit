@@ -6,6 +6,8 @@
   Modification: 2019/08/09
 **********************************************************************/
 #include "Freenove_4WD_Car_for_Arduino.h"
+#include "Automatic_Obstacle_Avoidance_Mode.h"
+#include "Automatic_Tracking_Line_Mode.h"
 #include "BluetoothOrders.h"
 #include "Freenove_WS2812B_RGBLED_Controller.h"
 
@@ -16,6 +18,7 @@ u32 lastUploadVoltageTime;
 String inputStringBLE = "";
 bool stringComplete = false;
 int paramters[COMMANDS_COUNT_MAX], paramterCount = 0;
+int bleCarMode = MODE_NONE;
 
 #define STRIP_I2C_ADDRESS  0x20
 #define STRIP_LEDS_COUNT   10
@@ -31,6 +34,7 @@ Freenove_WS2812B_Controller strip(STRIP_I2C_ADDRESS, STRIP_LEDS_COUNT, TYPE_GRB)
 void setup() {
   pinsSetup();
   Serial.begin(9600);
+  servoSetup();
   while (!strip.begin());
   strip.setAllLedsColor(0xFF0000);
 }
@@ -65,6 +69,26 @@ void loop() {
           motorRun(paramters[1], paramters[2]);
         }
         break;
+      case ACTION_CAR_MODE:
+        if (paramterCount == 1) {
+          bleCarMode = paramters[1];
+          switch (bleCarMode)
+          {
+            case MODE_NONE: case MODE_GRAVITY:
+              resetCarAction();
+              writeServo(OA_SERVO_CENTER);
+              break;
+            case MODE_ULTRASONIC:
+              oa_CalculateVoltageCompensation();
+              break;
+            case MODE_TRACKING:
+              tk_CalculateVoltageCompensation();
+              break;
+            default:
+              break;
+          }
+        }
+        break;
       case ACTION_BUZZER:
         if (paramterCount == 1) {
           setBuzzer(paramters[1]);
@@ -97,6 +121,20 @@ void loop() {
       default:
         break;
     }
+  }
+  switch (bleCarMode)
+  {
+    case MODE_NONE: case MODE_GRAVITY:
+      break;
+    case MODE_ULTRASONIC:
+      upLoadSonarValueToApp();
+      updateAutomaticObstacleAvoidance();
+      break;
+    case MODE_TRACKING:
+      updateAutomaticTrackingLine();
+      break;
+    default:
+      break;
   }
   static u8 lastColor[3];
   switch (stripDisplayMode)
@@ -162,6 +200,12 @@ void upLoadVoltageToApp() {
     voltage = batteryVoltage * 1000;
   }
   String sendString = String(ACTION_GET_VOLTAGE) + String(INTERVAL_CHAR) + String((voltage)) + String(INTERVAL_CHAR);
+  Serial.println(sendString);
+}
+
+extern int distance[3];
+void upLoadSonarValueToApp() {
+  String sendString = String(ACTION_ULTRASONIC) + String(INTERVAL_CHAR) + String((distance[1])) + String(INTERVAL_CHAR);
   Serial.println(sendString);
 }
 
