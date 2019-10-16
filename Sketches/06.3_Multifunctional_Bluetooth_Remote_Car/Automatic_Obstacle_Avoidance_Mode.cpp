@@ -5,17 +5,17 @@
 #include "Automatic_Obstacle_Avoidance_Mode.h"
 
 Servo servo;
-byte servoOffset = 0;
+char servoOffset = 0;
 int oa_VoltageCompensationToSpeed;
-int distance[3];
+
 void servoSetup() {
 	getServoOffsetFromEEPROM();
 	servo.attach(PIN_SERVO);
 	servo.write(90 + servoOffset);
 }
 
-void setServoOffset(byte offset) {
-	servoOffset = offset = constrain(offset, -10, 10);
+void setServoOffset(char offset) {
+	servoOffset = offset = constrain(offset, -100, 100);
 	servo.write(90 + offset);
 }
 
@@ -58,7 +58,7 @@ void oa_CalculateVoltageCompensation() {
 }
 
 void updateAutomaticObstacleAvoidance() {
-	int tempDistance[3][5], sumDisntance;
+	int distance[3], tempDistance[3][5], sumDisntance;
 	static u8 cnt = 0, servoAngle = 0, lastServoAngle = 0;	//
 	if (cnt == 0) {
 		for (int i = 0; i < 3; i++) {

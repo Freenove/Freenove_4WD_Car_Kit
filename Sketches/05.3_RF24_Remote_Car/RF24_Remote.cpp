@@ -7,7 +7,7 @@ int nrfDataRead[8];
 bool nrf24L01Setup() {
 	// NRF24L01
 	if (radio.begin()) {                      // initialize RF24
-		radio.setPALevel(RF24_PA_LOW);      // set power amplifier (PA) level
+		radio.setPALevel(RF24_PA_MAX);      // set power amplifier (PA) level
 		radio.setDataRate(RF24_1MBPS);      // set data rate through the air
 		radio.setRetries(0, 15);            // set the number and delay of retries
 		radio.openWritingPipe(addresses);   // open a pipe for writing

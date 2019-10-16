@@ -5,7 +5,7 @@
 #include "Automatic_Obstacle_Avoidance_Mode.h"
 
 Servo servo;
-byte servoOffset = 0;
+char servoOffset = 0;
 int oa_VoltageCompensationToSpeed;
 
 void servoSetup() {
@@ -14,8 +14,8 @@ void servoSetup() {
 	servo.write(90 + servoOffset);
 }
 
-void setServoOffset(byte offset) {
-	servoOffset = offset = constrain(offset, -10, 10);
+void setServoOffset(char offset) {
+	servoOffset = offset = constrain(offset, -100, 100);
 	servo.write(90 + offset);
 }
 
@@ -37,7 +37,7 @@ void getServoOffsetFromEEPROM() {
 float getSonar() {
 	unsigned long pingTime;
 	float distance;
-	digitalWrite(PIN_SONIC_TRIG, HIGH); // make trigPin output high level lasting for 10¦Ìs to triger HC_SR04,
+	digitalWrite(PIN_SONIC_TRIG, HIGH); // make trigPin output high level lasting for 10ï¿½ï¿½s to triger HC_SR04,
 	delayMicroseconds(10);
 	digitalWrite(PIN_SONIC_TRIG, LOW);
 	pingTime = pulseIn(PIN_SONIC_ECHO, HIGH, SONIC_TIMEOUT); // Wait HC-SR04 returning to the high level and measure out this waitting time

@@ -99,7 +99,7 @@ void loop() {
         case ON_ON_ON:
           break;
         case ON_ON_OFF:   //S1,S2 ON, S3 OFF
-          setServoOffset(nrfDataRead[1] / 100);
+          setServoOffset(map(nrfDataRead[1], 0, 1023, -20, 20));
           if (nrfDataRead[JOYSTICK_Z] == 0) {
             setBuzzer(true);
             writeServoOffsetToEEPROM();

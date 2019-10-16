@@ -44,10 +44,10 @@
 
 
 extern Servo servo;
-extern byte servoOffset;
+extern char servoOffset;
 
 void servoSetup();
-void setServoOffset(byte offset);
+void setServoOffset(char offset);
 void writeServo(u8 n);
 void writeServoOffsetToEEPROM();
 void getServoOffsetFromEEPROM();
@@ -57,4 +57,3 @@ void oa_CalculateVoltageCompensation();
 void updateAutomaticObstacleAvoidance();
 
 #endif
-
