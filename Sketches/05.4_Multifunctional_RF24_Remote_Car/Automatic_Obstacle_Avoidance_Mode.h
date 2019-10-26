@@ -57,3 +57,4 @@ void oa_CalculateVoltageCompensation();
 void updateAutomaticObstacleAvoidance();
 
 #endif
+

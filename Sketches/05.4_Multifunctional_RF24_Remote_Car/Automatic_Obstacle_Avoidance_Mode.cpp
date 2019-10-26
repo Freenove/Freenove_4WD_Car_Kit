@@ -7,7 +7,7 @@
 Servo servo;
 char servoOffset = 0;
 int oa_VoltageCompensationToSpeed;
-
+int distance[3];
 void servoSetup() {
 	getServoOffsetFromEEPROM();
 	servo.attach(PIN_SERVO);
@@ -37,7 +37,7 @@ void getServoOffsetFromEEPROM() {
 float getSonar() {
 	unsigned long pingTime;
 	float distance;
-	digitalWrite(PIN_SONIC_TRIG, HIGH); // make trigPin output high level lasting for 10ï¿½ï¿½s to triger HC_SR04,
+	digitalWrite(PIN_SONIC_TRIG, HIGH); // make trigPin output high level lasting for 10¦Ìs to triger HC_SR04,
 	delayMicroseconds(10);
 	digitalWrite(PIN_SONIC_TRIG, LOW);
 	pingTime = pulseIn(PIN_SONIC_ECHO, HIGH, SONIC_TIMEOUT); // Wait HC-SR04 returning to the high level and measure out this waitting time
@@ -58,7 +58,7 @@ void oa_CalculateVoltageCompensation() {
 }
 
 void updateAutomaticObstacleAvoidance() {
-	int distance[3], tempDistance[3][5], sumDisntance;
+	int tempDistance[3][5], sumDisntance;
 	static u8 cnt = 0, servoAngle = 0, lastServoAngle = 0;	//
 	if (cnt == 0) {
 		for (int i = 0; i < 3; i++) {
