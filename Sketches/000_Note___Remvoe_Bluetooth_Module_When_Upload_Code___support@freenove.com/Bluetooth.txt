@@ -1,0 +1,4 @@
+1, Bluetooth uses serial port. And uploading also use serial port.
+    You need remove Bluetooth first when upload code.
+
+2, After upload code, reconnect Bluetooth and restart the car.
