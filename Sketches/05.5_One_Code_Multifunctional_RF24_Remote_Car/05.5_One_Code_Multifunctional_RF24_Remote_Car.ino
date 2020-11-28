@@ -9,6 +9,7 @@
 #include <EEPROM.h>
 #include "Servo.h"
 #include "RF24.h"
+#include <FlexiTimer2.h>
 
 #define PIN_SERVO      2
 #define PIN_DIRECTION_LEFT  4
@@ -91,7 +92,7 @@ int tk_VoltageCompensationToSpeed;
 RF24 radio(PIN_SPI_CE, PIN_SPI_CSN);
 const byte addresses[6] = "Free1";
 int nrfDataRead[8];
-
+bool nrfComplete = false;
 enum RemoteData
 {
   POT1 = 0,
@@ -138,6 +139,7 @@ void setup() {
 
 void loop() {
   if (getNrf24L01Data()) { 
+    clearNrfFlag();
     nrfCarMode = updateNrfCarMode();
     if (nrfCarMode != lastNrfCarMode) {
       if (switchModeState == MODE_SWITCHING_WAS_FINISHED) {
@@ -513,22 +515,40 @@ bool nrf24L01Setup() {
     radio.openWritingPipe(addresses);   // open a pipe for writing
     radio.openReadingPipe(1, addresses);// open a pipe for reading
     radio.startListening();             // start monitoringtart listening on the pipes opened
-    return true;
+    
+    FlexiTimer2::set(20, 1.0 / 1000, checkNrfReceived); // call every 20 1ms "ticks"
+    FlexiTimer2::start();
+
+	return true;
   }
   return false;
 }
 
-bool getNrf24L01Data()
-{
+void checkNrfReceived() {
+ 
   delayMicroseconds(1000);
   if (radio.available()) {             // if receive the data
     while (radio.available()) {         // read all the data
       radio.read(nrfDataRead, sizeof(nrfDataRead));   // read data
     }
-    return true;
+    nrfComplete = true;
+    return;
   }
-  return false;
+  nrfComplete = false;
 }
+
+bool getNrf24L01Data()
+{
+  return nrfComplete;
+}
+
+void clearNrfFlag() {
+  nrfComplete = 0;
+}
+
+
+
+
 
 void updateCarActionByNrfRemote() {
   int x = nrfDataRead[2] - 512;

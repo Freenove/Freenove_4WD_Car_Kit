@@ -3,7 +3,7 @@
   Product     : Freenove 4WD Car for UNO
   Description : A Multifunctional RF24-Remote Car.
   Auther      : www.freenove.com
-  Modification: 2019/08/08
+  Modification: 2020/11/27
 **********************************************************************/
 #include "Automatic_Tracking_Line_Mode.h"
 #include "Automatic_Obstacle_Avoidance_Mode.h"
@@ -42,7 +42,8 @@ void setup() {
 }
 
 void loop() {
-  if (getNrf24L01Data()) { 
+  if (getNrf24L01Data()) {
+    clearNrfFlag();
     nrfCarMode = updateNrfCarMode();
     if (nrfCarMode != lastNrfCarMode) {
       if (switchModeState == MODE_SWITCHING_WAS_FINISHED) {

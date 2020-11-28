@@ -3,7 +3,7 @@
   Product     : Freenove 4WD Car for UNO
   Description : A RF24 Remote Car.
   Auther      : www.freenove.com
-  Modification: 2019/08/06
+  Modification: 2020/11/27
 **********************************************************************/
 #include "Freenove_4WD_Car_for_Arduino.h"
 #include "RF24_Remote.h"
@@ -21,6 +21,7 @@ void setup() {
 
 void loop() {
   if (getNrf24L01Data()) {
+    clearNrfFlag();
     updateCarActionByNrfRemote();
     lastNrfUpdateTime = millis();
   }
