@@ -4,7 +4,7 @@
 #define _FREENOVE_4WD_CAR_FOR_ARDUINO_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
+	#include "Arduino.h"
 #else
 	#include "WProgram.h"
 #endif
