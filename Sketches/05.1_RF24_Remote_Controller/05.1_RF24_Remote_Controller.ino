@@ -39,7 +39,7 @@ void setup() {
   pinMode(joystickZPin, INPUT);       // set led1Pin to input mode
   pinMode(s1Pin, INPUT);              // set s1Pin to input mode
   pinMode(s2Pin, INPUT);              // set s2Pin to input mode
-  pinMode(s2Pin, INPUT);              // set s3Pin to input mode
+  pinMode(s3Pin, INPUT);              // set s3Pin to input mode
   pinMode(led1Pin, OUTPUT);           // set led1Pin to output mode
   pinMode(led2Pin, OUTPUT);           // set led2Pin to output mode
   pinMode(led3Pin, OUTPUT);           // set led3Pin to output mode
