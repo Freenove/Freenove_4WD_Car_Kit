@@ -35,7 +35,7 @@ void setup() {
   pinsSetup();
   Serial.begin(9600);
   servoSetup();
-  while (!strip.begin());
+  strip.begin();
   strip.setAllLedsColor(0xFF0000);
 }
 
