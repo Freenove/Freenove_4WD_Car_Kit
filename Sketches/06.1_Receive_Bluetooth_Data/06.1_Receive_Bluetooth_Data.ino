@@ -1,10 +1,10 @@
 /**********************************************************************
-* Filename    : Receive_Bluetooth_Data.ino
-* Product     : Freenove 4WD Car for UNO
-* Description : Receive data from bluetooth and print it to monitor.
-* Auther      : www.freenove.com
-* Modification: 2019/08/24
-* Notes       : This code comes from the sample program SerialEvent.ino.
+  Filename    : Receive_Bluetooth_Data.ino
+  Product     : Freenove 4WD Car for UNO
+  Description : Receive data from bluetooth and print it to monitor.
+  Auther      : www.freenove.com
+  Modification: 2022/7/11
+  Notes       : This code comes from the sample program SerialEvent.ino.
 **********************************************************************/
 String inputString = "";         // a String to hold incoming data
 bool stringComplete = false;  // whether the string is complete
@@ -12,7 +12,9 @@ bool stringComplete = false;  // whether the string is complete
 void setup() {
   // initialize serial:
   Serial.begin(9600);
-  Serial.println("AT+NAMEBT05");  // Or use Serial.print("AT+NAMEBT05\r\n");
+  Serial.println("AT+NAMEBT05-GEN");  // Or use Serial.print("AT+NAMEBT05-GEN\r\n");
+  delay(200);
+  Serial.println("AT+NAMBBT05-BLE");  // Or use Serial.print("AT+NAMEBT05-BLE\r\n");
   delay(200);
   Serial.println("AT+ROLE0");
   delay(200);
