@@ -13,6 +13,7 @@
 #include <IRremote.h>
 
 #define PIN_SERVO     2
+#define MOTOR_DIRECTION     0 //If the direction is reversed, change 0 to 1
 #define PIN_DIRECTION_LEFT  4
 #define PIN_DIRECTION_RIGHT 3
 #define PIN_MOTOR_PWM_LEFT  6
@@ -205,17 +206,16 @@ void pinsSetup() {
 void motorRun(int speedl, int speedr) {
   int dirL = 0, dirR = 0;
   if (speedl > 0) {
-    dirL = 0;
-  }
-  else {
-    dirL = 1;
+    dirL = 0 ^ MOTOR_DIRECTION;
+  } else {
+    dirL = 1 ^ MOTOR_DIRECTION;
     speedl = -speedl;
   }
+
   if (speedr > 0) {
-    dirR = 1;
-  }
-  else {
-    dirR = 0;
+    dirR = 1 ^ MOTOR_DIRECTION;
+  } else {
+    dirR = 0 ^ MOTOR_DIRECTION;
     speedr = -speedr;
   }
   speedl = constrain(speedl, 0, 255);
@@ -224,7 +224,6 @@ void motorRun(int speedl, int speedr) {
     speedl = 0;
     speedr = 0;
   }
-
   digitalWrite(PIN_DIRECTION_LEFT, dirL);
   digitalWrite(PIN_DIRECTION_RIGHT, dirR);
   analogWrite(PIN_MOTOR_PWM_LEFT, speedl);

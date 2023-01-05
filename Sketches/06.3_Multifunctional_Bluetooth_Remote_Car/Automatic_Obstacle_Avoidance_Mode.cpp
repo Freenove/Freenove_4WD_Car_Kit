@@ -37,7 +37,7 @@ void getServoOffsetFromEEPROM() {
 float getSonar() {
 	unsigned long pingTime;
 	float distance;
-	digitalWrite(PIN_SONIC_TRIG, HIGH); // make trigPin output high level lasting for 10¦Ìs to triger HC_SR04,
+	digitalWrite(PIN_SONIC_TRIG, HIGH); // make trigPin output high level lasting for 10ï¿½ï¿½s to triger HC_SR04,
 	delayMicroseconds(10);
 	digitalWrite(PIN_SONIC_TRIG, LOW);
 	pingTime = pulseIn(PIN_SONIC_ECHO, HIGH, SONIC_TIMEOUT); // Wait HC-SR04 returning to the high level and measure out this waitting time

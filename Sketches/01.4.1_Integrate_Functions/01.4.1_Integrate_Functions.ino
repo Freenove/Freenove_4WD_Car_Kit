@@ -3,6 +3,7 @@
 #define I2C_ADDRESS  0x20 //define I2C address of LEDs 
 #define LEDS_COUNT   10   //it defines number of lEDs
 
+#define MOTOR_DIRECTION     0 //If the direction is reversed, change 0 to 1
 #define PIN_DIRECTION_LEFT  4
 #define PIN_DIRECTION_RIGHT 3
 #define PIN_MOTOR_PWM_LEFT  6
@@ -58,18 +59,16 @@ void pinsSetup() {
 void motorRun(int speedl, int speedr) {
   int dirL = 0, dirR = 0;
   if (speedl > 0) {
-    dirL = 0;
-  }
-  else {
-    dirL = 1;
+    dirL = 0 ^ MOTOR_DIRECTION;
+  } else {
+    dirL = 1 ^ MOTOR_DIRECTION;
     speedl = -speedl;
   }
 
   if (speedr > 0) {
-    dirR = 1;
-  }
-  else {
-    dirR = 0;
+    dirR = 1 ^ MOTOR_DIRECTION;
+  } else {
+    dirR = 0 ^ MOTOR_DIRECTION;
     speedr = -speedr;
   }
 

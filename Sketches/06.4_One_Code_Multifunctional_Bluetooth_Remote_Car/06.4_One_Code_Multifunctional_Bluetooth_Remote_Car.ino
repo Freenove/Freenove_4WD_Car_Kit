@@ -10,25 +10,25 @@
 #include "Servo.h"
 #include "RF24.h"
 
-#define ACTION_MOVE   'A'
-#define ACTION_STOP   'B'
-#define ACTION_RGB   'C'
-#define ACTION_BUZZER   'D'
-#define ACTION_ULTRASONIC   'E'
-#define ACTION_LIGHT_TRACING   'F'
-#define ACTION_TRACKING   'G'
-#define ACTION_CAR_MODE   'H'
-#define ACTION_GET_VOLTAGE   'I'
-#define ECHO_OK   'J'
-#define ACTION_NONE   'K'
+#define ACTION_MOVE 'A'
+#define ACTION_STOP 'B'
+#define ACTION_RGB 'C'
+#define ACTION_BUZZER 'D'
+#define ACTION_ULTRASONIC 'E'
+#define ACTION_LIGHT_TRACING 'F'
+#define ACTION_TRACKING 'G'
+#define ACTION_CAR_MODE 'H'
+#define ACTION_GET_VOLTAGE 'I'
+#define ECHO_OK 'J'
+#define ACTION_NONE 'K'
 
-#define MODE_NONE  0
-#define MODE_GRAVITY  1
-#define MODE_ULTRASONIC  2
-#define MODE_TRACKING  3
+#define MODE_NONE 0
+#define MODE_GRAVITY 1
+#define MODE_ULTRASONIC 2
+#define MODE_TRACKING 3
 
-#define UPLOAD_VOL_TIME    3000
-#define COMMANDS_COUNT_MAX  8
+#define UPLOAD_VOL_TIME 3000
+#define COMMANDS_COUNT_MAX 8
 #define INTERVAL_CHAR '#'
 u32 lastUploadVoltageTime;
 String inputStringBLE = "";
@@ -36,63 +36,64 @@ bool stringComplete = false;
 int paramters[COMMANDS_COUNT_MAX], paramterCount = 0;
 int bleCarMode = MODE_NONE;
 
-#define PIN_SERVO      2
-#define PIN_DIRECTION_LEFT  4
+#define PIN_SERVO 2
+#define MOTOR_DIRECTION 0  //If the direction is reversed, change 0 to 1
+#define PIN_DIRECTION_LEFT 4
 #define PIN_DIRECTION_RIGHT 3
-#define PIN_MOTOR_PWM_LEFT  6
+#define PIN_MOTOR_PWM_LEFT 6
 #define PIN_MOTOR_PWM_RIGHT 5
-#define PIN_SONIC_TRIG    7
-#define PIN_SONIC_ECHO    8
+#define PIN_SONIC_TRIG 7
+#define PIN_SONIC_ECHO 8
 #define PIN_IRREMOTE_RECV 9
-#define PIN_SPI_MOSI    11
-#define PIN_SPI_MISO    12
-#define PIN_SPI_SCK     13
-#define PIN_BATTERY     A0
-#define PIN_BUZZER      A0
+#define PIN_SPI_MOSI 11
+#define PIN_SPI_MISO 12
+#define PIN_SPI_SCK 13
+#define PIN_BATTERY A0
+#define PIN_BUZZER A0
 #define PIN_TRACKING_LEFT A1
 #define PIN_TRACKING_CENTER A2
-#define PIN_TRACKING_RIGHT  A3
-#define MOTOR_PWM_DEAD    10
-#define BAT_VOL_STANDARD  7.0
+#define PIN_TRACKING_RIGHT A3
+#define MOTOR_PWM_DEAD 10
+#define BAT_VOL_STANDARD 7.0
 
-#define STRIP_I2C_ADDRESS  0x20
-#define STRIP_LEDS_COUNT   10
-#define MAX_NUMBER_OF_DISP_MODES  3
+#define STRIP_I2C_ADDRESS 0x20
+#define STRIP_LEDS_COUNT 10
+#define MAX_NUMBER_OF_DISP_MODES 3
 
-#define MODE_REMOTE_CONTROL       OFF_OFF_OFF
-#define MODE_LINE_TRACKING        OFF_ON_OFF
-#define MODE_OBSTACKE_AVOIDANCE     ON_OFF_OFF
+#define MODE_REMOTE_CONTROL OFF_OFF_OFF
+#define MODE_LINE_TRACKING OFF_ON_OFF
+#define MODE_OBSTACKE_AVOIDANCE ON_OFF_OFF
 
-#define TK_STOP_SPEED          0
-#define TK_FORWARD_SPEED        (90 + tk_VoltageCompensationToSpeed    )
-#define TK_FORWARD_SPEED_LOW      (80 + tk_VoltageCompensationToSpeed    )
-#define TK_TURN_SPEED_LV4       (160 + tk_VoltageCompensationToSpeed   )
-#define TK_TURN_SPEED_LV3       (130 + tk_VoltageCompensationToSpeed   )
-#define TK_TURN_SPEED_LV2       (-120 + tk_VoltageCompensationToSpeed  )
-#define TK_TURN_SPEED_LV1       (-140 + tk_VoltageCompensationToSpeed  )
-#define TK_SPEED_OFFSET_PER_V     30
+#define TK_STOP_SPEED 0
+#define TK_FORWARD_SPEED (90 + tk_VoltageCompensationToSpeed)
+#define TK_FORWARD_SPEED_LOW (80 + tk_VoltageCompensationToSpeed)
+#define TK_TURN_SPEED_LV4 (160 + tk_VoltageCompensationToSpeed)
+#define TK_TURN_SPEED_LV3 (130 + tk_VoltageCompensationToSpeed)
+#define TK_TURN_SPEED_LV2 (-120 + tk_VoltageCompensationToSpeed)
+#define TK_TURN_SPEED_LV1 (-140 + tk_VoltageCompensationToSpeed)
+#define TK_SPEED_OFFSET_PER_V 30
 
-#define OA_SERVO_CENTER          (90)
-#define OA_SCAN_ANGLE_INTERVAL  50
-#define OA_SCAN_ANGLE_MIN   (OA_SERVO_CENTER - OA_SCAN_ANGLE_INTERVAL)
-#define OA_SCAN_ANGLE_MAX   (OA_SERVO_CENTER + OA_SCAN_ANGLE_INTERVAL)
-#define OA_WAITTING_SERVO_TIME  130
-#define OA_CRUISE_SPEED     (110 + oa_VoltageCompensationToSpeed)
-#define OA_ROTATY_SPEED_LOW   (120 + oa_VoltageCompensationToSpeed)
-#define OA_ROTATY_SPEED_NORMAL    (150 + oa_VoltageCompensationToSpeed)
-#define OA_ROTATY_SPEED_HIGH    (180 + oa_VoltageCompensationToSpeed)
-#define OA_TURN_SPEED_LV4     (180 + oa_VoltageCompensationToSpeed)
-#define OA_TURN_SPEED_LV1     (50 + oa_VoltageCompensationToSpeed )
-#define OA_BACK_SPEED_LOW     (110 + oa_VoltageCompensationToSpeed)
-#define OA_BACK_SPEED_NORMAL    (150 + oa_VoltageCompensationToSpeed)
-#define OA_BACK_SPEED_HIGH      (180 + oa_VoltageCompensationToSpeed)
-#define OA_OBSTACLE_DISTANCE    40
-#define OA_OBSTACLE_DISTANCE_LOW  15
+#define OA_SERVO_CENTER (90)
+#define OA_SCAN_ANGLE_INTERVAL 50
+#define OA_SCAN_ANGLE_MIN (OA_SERVO_CENTER - OA_SCAN_ANGLE_INTERVAL)
+#define OA_SCAN_ANGLE_MAX (OA_SERVO_CENTER + OA_SCAN_ANGLE_INTERVAL)
+#define OA_WAITTING_SERVO_TIME 130
+#define OA_CRUISE_SPEED (110 + oa_VoltageCompensationToSpeed)
+#define OA_ROTATY_SPEED_LOW (120 + oa_VoltageCompensationToSpeed)
+#define OA_ROTATY_SPEED_NORMAL (150 + oa_VoltageCompensationToSpeed)
+#define OA_ROTATY_SPEED_HIGH (180 + oa_VoltageCompensationToSpeed)
+#define OA_TURN_SPEED_LV4 (180 + oa_VoltageCompensationToSpeed)
+#define OA_TURN_SPEED_LV1 (50 + oa_VoltageCompensationToSpeed)
+#define OA_BACK_SPEED_LOW (110 + oa_VoltageCompensationToSpeed)
+#define OA_BACK_SPEED_NORMAL (150 + oa_VoltageCompensationToSpeed)
+#define OA_BACK_SPEED_HIGH (180 + oa_VoltageCompensationToSpeed)
+#define OA_OBSTACLE_DISTANCE 40
+#define OA_OBSTACLE_DISTANCE_LOW 15
 #define OA_SPEED_OFFSET_PER_V 35
-#define OA_SERVO_OFFSET_ADDR_IN_EEPROM    0
-#define MAX_DISTANCE    300   //cm
-#define SONIC_TIMEOUT   (MAX_DISTANCE*60)
-#define SOUND_VELOCITY    340   //soundVelocity: 340m/s
+#define OA_SERVO_OFFSET_ADDR_IN_EEPROM 0
+#define MAX_DISTANCE 300  //cm
+#define SONIC_TIMEOUT (MAX_DISTANCE * 60)
+#define SOUND_VELOCITY 340  //soundVelocity: 340m/s
 
 u8 colorPos = 0;
 u8 colorStep = 50;
@@ -142,8 +143,7 @@ void loop() {
     inputStringBLE = "";
 
     char commandChar = inputCommandArray[0].charAt(0);
-    switch (commandChar)
-    {
+    switch (commandChar) {
       case ACTION_MOVE:
         if (paramterCount == 2) {
           motorRun(paramters[1], paramters[2]);
@@ -152,9 +152,9 @@ void loop() {
       case ACTION_CAR_MODE:
         if (paramterCount == 1) {
           bleCarMode = paramters[1];
-          switch (bleCarMode)
-          {
-            case MODE_NONE: case MODE_GRAVITY:
+          switch (bleCarMode) {
+            case MODE_NONE:
+            case MODE_GRAVITY:
               resetCarAction();
               writeServo(OA_SERVO_CENTER);
               break;
@@ -177,8 +177,7 @@ void loop() {
       case ACTION_RGB:
         if (paramterCount == 4) {
           stripDisplayMode = paramters[1];
-          switch (stripDisplayMode)
-          {
+          switch (stripDisplayMode) {
             case 0:
               colorStep = 5;
               stripDisplayDelay = 100;
@@ -202,9 +201,9 @@ void loop() {
         break;
     }
   }
-  switch (bleCarMode)
-  {
-    case MODE_NONE: case MODE_GRAVITY:
+  switch (bleCarMode) {
+    case MODE_NONE:
+    case MODE_GRAVITY:
       break;
     case MODE_ULTRASONIC:
       upLoadSonarValueToApp();
@@ -217,11 +216,9 @@ void loop() {
       break;
   }
   static u8 lastColor[3];
-  switch (stripDisplayMode)
-  {
+  switch (stripDisplayMode) {
     case 0:
-      if (millis() - lastStripUpdateTime > stripDisplayDelay)
-      {
+      if (millis() - lastStripUpdateTime > stripDisplayDelay) {
         for (int i = 0; i < STRIP_LEDS_COUNT; i++) {
           strip.setLedColorData(i, strip.Wheel(colorPos + i * 25));
         }
@@ -231,29 +228,23 @@ void loop() {
       }
       break;
     case 1:
-      if (millis() - lastStripUpdateTime > stripDisplayDelay)
-      {
+      if (millis() - lastStripUpdateTime > stripDisplayDelay) {
         strip.setLedColor(currentLedIndex, strip.Wheel(colorPos));
         currentLedIndex++;
-        if (currentLedIndex == STRIP_LEDS_COUNT)
-        {
+        if (currentLedIndex == STRIP_LEDS_COUNT) {
           currentLedIndex = 0;
-          colorPos += colorStep; //
+          colorPos += colorStep;  //
         }
         lastStripUpdateTime = millis();
       }
       break;
     case 2:
       colorPos = colorStep;
-      if (millis() - lastStripUpdateTime > stripDisplayDelay)
-      {
+      if (millis() - lastStripUpdateTime > stripDisplayDelay) {
         static bool ledState = true;
-        if (ledState)
-        {
+        if (ledState) {
           strip.setAllLedsColor(paramters[2], paramters[3], paramters[4]);
-        }
-        else
-        {
+        } else {
           strip.setAllLedsColor(0x00);
         }
         ledState = !ledState;
@@ -261,8 +252,7 @@ void loop() {
       }
       break;
     case 3:
-      if (lastColor[0] != paramters[2] || lastColor[1] != paramters[3] || lastColor[2] != paramters[4])
-      {
+      if (lastColor[0] != paramters[2] || lastColor[1] != paramters[3] || lastColor[2] != paramters[4]) {
         strip.setAllLedsColor(paramters[2], paramters[3], paramters[4]);
         lastColor[0] = paramters[2];
         lastColor[1] = paramters[3];
@@ -311,8 +301,7 @@ void setServoOffset(char offset) {
   servo.write(90 + offset);
 }
 
-void writeServo(u8 n)
-{
+void writeServo(u8 n) {
   servo.write(90 + servoOffset);
 }
 
@@ -329,15 +318,15 @@ void getServoOffsetFromEEPROM() {
 float getSonar() {
   unsigned long pingTime;
   float distance;
-  digitalWrite(PIN_SONIC_TRIG, HIGH); // make trigPin output high level lasting for 10��s to triger HC_SR04,
+  digitalWrite(PIN_SONIC_TRIG, HIGH);  // make trigPin output high level lasting for 10��s to triger HC_SR04,
   delayMicroseconds(10);
   digitalWrite(PIN_SONIC_TRIG, LOW);
-  pingTime = pulseIn(PIN_SONIC_ECHO, HIGH, SONIC_TIMEOUT); // Wait HC-SR04 returning to the high level and measure out this waitting time
+  pingTime = pulseIn(PIN_SONIC_ECHO, HIGH, SONIC_TIMEOUT);  // Wait HC-SR04 returning to the high level and measure out this waitting time
   if (pingTime != 0)
-    distance = (float)pingTime * SOUND_VELOCITY / 2 / 10000; // calculate the distance according to the time
+    distance = (float)pingTime * SOUND_VELOCITY / 2 / 10000;  // calculate the distance according to the time
   else
     distance = MAX_DISTANCE;
-  return distance; // return the distance value
+  return distance;  // return the distance value
 }
 
 void oa_CalculateVoltageCompensation() {
@@ -369,8 +358,7 @@ void updateAutomaticObstacleAvoidance() {
       sumDisntance = 0;
     }
     cnt++;
-  }
-  else {
+  } else {
     for (int i = 2; i > 0; i--) {
       servoAngle = OA_SCAN_ANGLE_MAX - i * OA_SCAN_ANGLE_INTERVAL + servoOffset;
       servo.write(servoAngle);
@@ -389,39 +377,34 @@ void updateAutomaticObstacleAvoidance() {
     cnt = 0;
   }
 
-  if (distance[1] < OA_OBSTACLE_DISTANCE) {       //Too little distance ahead
+  if (distance[1] < OA_OBSTACLE_DISTANCE) {  //Too little distance ahead
     if (distance[0] > OA_OBSTACLE_DISTANCE || distance[2] > OA_OBSTACLE_DISTANCE) {
-      motorRun(-OA_BACK_SPEED_LOW, -OA_BACK_SPEED_LOW); //Move back a little
+      motorRun(-OA_BACK_SPEED_LOW, -OA_BACK_SPEED_LOW);  //Move back a little
       delay(100);
-      if (distance[0] > distance[2]) {      //Left distance is greater than right distance
+      if (distance[0] > distance[2]) {  //Left distance is greater than right distance
         motorRun(-OA_ROTATY_SPEED_LOW, OA_ROTATY_SPEED_LOW);
-      }
-      else {                    //Right distance is greater than left distance
+      } else {  //Right distance is greater than left distance
         motorRun(OA_ROTATY_SPEED_LOW, -OA_ROTATY_SPEED_LOW);
       }
-    }
-    else {                      //Get into the dead corner, move back a little, then spin.
+    } else {  //Get into the dead corner, move back a little, then spin.
       motorRun(-OA_BACK_SPEED_HIGH, -OA_BACK_SPEED_HIGH);
       delay(100);
       motorRun(-OA_ROTATY_SPEED_NORMAL, OA_ROTATY_SPEED_NORMAL);
     }
-  }
-  else {                        //No obstacles ahead
-    if (distance[0] < OA_OBSTACLE_DISTANCE) {     //Obstacles on the left front.
-      if (distance[0] < OA_OBSTACLE_DISTANCE_LOW) { //Very close to the left front obstacle.
-        motorRun(-OA_BACK_SPEED_LOW, -OA_BACK_SPEED_LOW); //Move back
+  } else {                                                 //No obstacles ahead
+    if (distance[0] < OA_OBSTACLE_DISTANCE) {              //Obstacles on the left front.
+      if (distance[0] < OA_OBSTACLE_DISTANCE_LOW) {        //Very close to the left front obstacle.
+        motorRun(-OA_BACK_SPEED_LOW, -OA_BACK_SPEED_LOW);  //Move back
         delay(100);
       }
       motorRun(OA_TURN_SPEED_LV4, OA_TURN_SPEED_LV1);
-    }
-    else if (distance[2] < OA_OBSTACLE_DISTANCE) {      //Obstacles on the right front.
-      if (distance[2] < OA_OBSTACLE_DISTANCE_LOW) {   //Very close to the right front obstacle.
-        motorRun(-OA_BACK_SPEED_LOW, -OA_BACK_SPEED_LOW); //Move back
+    } else if (distance[2] < OA_OBSTACLE_DISTANCE) {       //Obstacles on the right front.
+      if (distance[2] < OA_OBSTACLE_DISTANCE_LOW) {        //Very close to the right front obstacle.
+        motorRun(-OA_BACK_SPEED_LOW, -OA_BACK_SPEED_LOW);  //Move back
         delay(100);
       }
       motorRun(OA_TURN_SPEED_LV1, OA_TURN_SPEED_LV4);
-    }
-    else {                        //Cruising
+    } else {  //Cruising
       motorRun(OA_CRUISE_SPEED, OA_CRUISE_SPEED);
     }
   }
@@ -449,32 +432,31 @@ void updateAutomaticTrackingLine() {
   u8 trackingSensorVal = 0;
   trackingSensorVal = getTrackingSensorVal();
   //Serial.print(trackingSensorVal, BIN);
-  switch (trackingSensorVal)
-  {
-  case 0:   //000
-    motorRun(TK_FORWARD_SPEED, TK_FORWARD_SPEED);
-    break;
-  case 7:   //111
-    motorRun(TK_STOP_SPEED, TK_STOP_SPEED);
-    break;
-  case 1:   //001
-    motorRun(TK_TURN_SPEED_LV4, TK_TURN_SPEED_LV1);
-    break;
-  case 3:   //011
-    motorRun(TK_TURN_SPEED_LV3, TK_TURN_SPEED_LV2);
-    break;
-  case 2:   //010
-  case 5:   //101
-    motorRun(TK_FORWARD_SPEED, TK_FORWARD_SPEED);
-    break;
-  case 6:   //110
-    motorRun(TK_TURN_SPEED_LV2, TK_TURN_SPEED_LV3);
-    break;
-  case 4:   //100
-    motorRun(TK_TURN_SPEED_LV1, TK_TURN_SPEED_LV4);
-    break;
-  default:
-    break;
+  switch (trackingSensorVal) {
+    case 0:  //000
+      motorRun(TK_FORWARD_SPEED, TK_FORWARD_SPEED);
+      break;
+    case 7:  //111
+      motorRun(TK_STOP_SPEED, TK_STOP_SPEED);
+      break;
+    case 1:  //001
+      motorRun(TK_TURN_SPEED_LV4, TK_TURN_SPEED_LV1);
+      break;
+    case 3:  //011
+      motorRun(TK_TURN_SPEED_LV3, TK_TURN_SPEED_LV2);
+      break;
+    case 2:  //010
+    case 5:  //101
+      motorRun(TK_FORWARD_SPEED, TK_FORWARD_SPEED);
+      break;
+    case 6:  //110
+      motorRun(TK_TURN_SPEED_LV2, TK_TURN_SPEED_LV3);
+      break;
+    case 4:  //100
+      motorRun(TK_TURN_SPEED_LV1, TK_TURN_SPEED_LV4);
+      break;
+    default:
+      break;
   }
   //Serial.println();
   //delay(10);
@@ -487,12 +469,12 @@ void pinsSetup() {
   pinMode(PIN_DIRECTION_RIGHT, OUTPUT);
   pinMode(PIN_MOTOR_PWM_RIGHT, OUTPUT);
 
-  pinMode(PIN_SONIC_TRIG, OUTPUT);// set trigPin to output mode
-  pinMode(PIN_SONIC_ECHO, INPUT); // set echoPin to input mode
+  pinMode(PIN_SONIC_TRIG, OUTPUT);  // set trigPin to output mode
+  pinMode(PIN_SONIC_ECHO, INPUT);   // set echoPin to input mode
 
-  pinMode(PIN_TRACKING_LEFT, INPUT); // 
-  pinMode(PIN_TRACKING_RIGHT, INPUT); // 
-  pinMode(PIN_TRACKING_CENTER, INPUT); // 
+  pinMode(PIN_TRACKING_LEFT, INPUT);    //
+  pinMode(PIN_TRACKING_RIGHT, INPUT);   //
+  pinMode(PIN_TRACKING_CENTER, INPUT);  //
 
   setBuzzer(false);
 }
@@ -500,18 +482,16 @@ void pinsSetup() {
 void motorRun(int speedl, int speedr) {
   int dirL = 0, dirR = 0;
   if (speedl > 0) {
-    dirL = 0;
-  }
-  else {
-    dirL = 1;
+    dirL = 0 ^ MOTOR_DIRECTION;
+  } else {
+    dirL = 1 ^ MOTOR_DIRECTION;
     speedl = -speedl;
   }
 
   if (speedr > 0) {
-    dirR = 1;
-  }
-  else {
-    dirR = 0;
+    dirR = 1 ^ MOTOR_DIRECTION;
+  } else {
+    dirR = 0 ^ MOTOR_DIRECTION;
     speedr = -speedr;
   }
 
@@ -532,7 +512,7 @@ bool getBatteryVoltage() {
   if (!isBuzzered) {
     pinMode(PIN_BATTERY, INPUT);
     int batteryADC = analogRead(PIN_BATTERY);
-    if (batteryADC < 614)   // 3V/12V ,Voltage read: <2.1V/8.4V
+    if (batteryADC < 614)  // 3V/12V ,Voltage read: <2.1V/8.4V
     {
       batteryVoltage = batteryADC / 1023.0 * 5.0 * 4;
       return true;
