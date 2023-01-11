@@ -11,7 +11,7 @@
 #define PIN_SONIC_TRIG    7    //define Trig pin
 #define PIN_SONIC_ECHO    8    //define Echo pin
 
-#define MAX_DISTANCE    300   //cm
+#define MAX_DISTANCE    1000   //cm
 #define SONIC_TIMEOUT   (MAX_DISTANCE*60) // calculate timeout 
 #define SOUND_VELOCITY  340  //soundVelocity: 340m/s
 
