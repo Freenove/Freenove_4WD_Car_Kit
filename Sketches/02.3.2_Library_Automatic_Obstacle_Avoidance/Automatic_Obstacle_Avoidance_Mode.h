@@ -38,7 +38,7 @@
 
 #define OA_SERVO_OFFSET_ADDR_IN_EEPROM		0
 
-#define MAX_DISTANCE		300		//cm
+#define MAX_DISTANCE		1000
 #define SONIC_TIMEOUT		(MAX_DISTANCE*60)
 #define SOUND_VELOCITY		340		//soundVelocity: 340m/s
 
