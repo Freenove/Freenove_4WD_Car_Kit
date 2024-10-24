@@ -1,3 +1,11 @@
+/**********************************************************************
+  Filename    : Receive_Bluetooth_Data.ino
+  Product     : Freenove 4WD Car for UNO
+  Description : Receive data from bluetooth and print it to monitor.
+  Auther      : www.freenove.com
+  Modification: 2024/10/24
+  Notes       : This code comes from the sample program SerialEvent.ino.
+**********************************************************************/
 String inputString = "";         // a String to hold incoming data  
 bool stringComplete = false;     // whether the string is complete  
 long baudRate[] = {2400, 9600, 19200, 115200};  
