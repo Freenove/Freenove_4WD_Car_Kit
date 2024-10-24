@@ -114,7 +114,7 @@ int tk_VoltageCompensationToSpeed;
 
 void setup() {
   pinsSetup();
-  Serial.begin(9600);
+  Serial.begin(115200);
   servoSetup();
   strip.begin();
   strip.setAllLedsColor(0xFF0000);

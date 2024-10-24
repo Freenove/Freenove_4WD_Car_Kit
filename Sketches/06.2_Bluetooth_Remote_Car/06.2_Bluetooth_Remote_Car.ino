@@ -18,7 +18,7 @@ bool stringComplete = false;
 
 void setup() {
   pinsSetup();
-  Serial.begin(9600);
+  Serial.begin(115200);
 
 }
 

@@ -33,7 +33,7 @@ Freenove_WS2812B_Controller strip(STRIP_I2C_ADDRESS, STRIP_LEDS_COUNT, TYPE_GRB)
 
 void setup() {
   pinsSetup();
-  Serial.begin(9600);
+  Serial.begin(115200);
   servoSetup();
   strip.begin();
   strip.setAllLedsColor(0xFF0000);
